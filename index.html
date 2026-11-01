@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Alvin! ❤️</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Canvas Confetti Library with Fallback Handler -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    if (typeof confetti === 'undefined') {
+      window.confetti = function() {
+        console.log('Confetti triggered (fallback active)');
+      };
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink-glow: #ff4d8d;
+      --accent-gold: #ffd700;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, #2e0836 0%, #0c0217 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .font-romantic { font-family: 'Dancing Script', cursive; }
+    .font-vibe { font-family: 'Great Vibes', cursive; }
+    .font-handwriting { font-family: 'Caveat', cursive; }
+    .font-mono-code { font-family: 'Fira Code', monospace; }
+
+    /* Glassmorphism Card Styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 182, 193, 0.3);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 77, 141, 0.2);
+    }
+
+    .glass-btn {
+      background: linear-gradient(135deg, #ff4d8d 0%, #ff7eb3 100%);
+      box-shadow: 0 4px 20px rgba(255, 77, 141, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .glass-btn:hover, .glass-btn:active {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 30px rgba(255, 77, 141, 0.8);
+    }
+
+    /* Background Canvas */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .glow-title {
+      text-shadow: 0 0 20px rgba(255, 77, 141, 0.9), 0 0 40px rgba(255, 77, 141, 0.5);
+    }
+
+    /* Full-Screen Kiss Particle Layer */
+    .kiss-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      transform-origin: center center;
+      animation: popFloatFade 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      will-change: transform, opacity;
+      line-height: 1;
+      filter: drop-shadow(0 0 12px rgba(255, 20, 147, 0.9));
+    }
+
+    @keyframes popFloatFade {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.1) rotate(-20deg);
+      }
+      15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.4) rotate(5deg);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -65%) scale(1.1) rotate(-10deg);
+      }
+      80% {
+        opacity: 0.85;
+        transform: translate(-50%, -90%) scale(1.2) rotate(10deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -125%) scale(1.5) rotate(0deg);
+      }
+    }
+
+    /* Evasive arena bounding box */
+    .evasive-arena {
+      position: relative;
+      width: 100%;
+      height: 220px;
+    }
+
+    /* Stage card transition effect */
+    .stage-card {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Centered Scaling SO Container */
+    .so-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      overflow: visible;
+      margin: 1.5rem 0;
+    }
+
+    #soText {
+      display: inline-block;
+      transform-origin: center center;
+      will-change: transform;
+      transition: transform 350ms ease-out;
+      color: #ff4d8d;
+      text-shadow: 0 0 25px #ff4d8d, 0 0 50px #ff4d8d, 0 0 80px #ff0055;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    #soRunawayText {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      word-break: break-all;
+      color: #ff4d8d;
+      font-size: clamp(3rem, 15vw, 12rem);
+      font-weight: 800;
+      line-height: 0.9;
+      text-align: center;
+      text-shadow: 0 0 25px #ff4d8d, 0 0 50px #ff4d8d, 0 0 80px #ff0055;
+    }
+
+    #letterCard {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #letterTextContainer {
+      width: 100%;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    #letterTextContainer p {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+      max-width: 100%;
+    }
+
+    /* Glitch Crash Screen Styling */
+    .crash-screen {
+      background: #05000a;
+      color: #ff3366;
+      font-family: 'Fira Code', monospace;
+    }
+
+    @keyframes hardShake {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-10px, 8px) rotate(-1deg); }
+      40% { transform: translate(10px, -8px) rotate(1deg); }
+      60% { transform: translate(-8px, -6px) rotate(-0.5deg); }
+      80% { transform: translate(8px, 6px) rotate(0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    .shake-screen {
+      animation: hardShake 0.3s ease-in-out infinite;
+    }
+
+    .pulse-glow {
+      animation: pulseGlowAnim 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlowAnim {
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 77, 141, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(255, 77, 141, 0.9); }
+    }
+  </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-3 md:p-6 relative overflow-hidden">
+
+  <!-- Background Animated Petals/Hearts Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="relative z-10 w-full max-w-2xl mx-auto my-auto p-2">
+
+    <!-- ================= STAGE 1: MULTILINGUAL HEART ================= -->
+    <section id="stage1" class="stage-card glass-card rounded-3xl p-4 md:p-6 text-center flex flex-col items-center max-h-[90vh] overflow-y-auto">
+      <span class="px-4 py-1 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-2">
+        Stage 1 • For My Alvin ❤️
+      </span>
+      <h1 class="text-3xl md:text-5xl font-romantic font-bold glow-title text-pink-300 mb-2">
+        Happy Birthday, My Love ❤️
+      </h1>
+      <p class="text-xs md:text-sm text-pink-100/80 mb-3 max-w-md">
+        Every language, every feeling, every dream — they all lead back to you, Alvin.
+      </p>
+
+      <!-- Canvas for Multilingual Heart -->
+      <div class="relative w-full flex justify-center items-center my-1 min-h-[360px]">
+        <canvas id="heartCanvas" width="500" height="360" class="max-w-full h-auto cursor-pointer filter drop-shadow-[0_0_20px_rgba(255,77,141,0.6)]"></canvas>
+      </div>
+
+      <div id="heartProgressText" class="text-xs text-pink-300/80 mb-4 font-mono">
+        Forming 250+ multilingual love particles...
+      </div>
+
+      <button id="stage1NextBtn" onclick="nextStage(2)" class="glass-btn hidden text-white font-semibold px-8 py-3.5 rounded-full text-lg cursor-pointer transform hover:scale-105 active:scale-95 transition">
+        Begin Our Journey ✨
+      </button>
+    </section>
+
+    <!-- ================= STAGE 2: ARE WE TOGETHER FOREVER? (EVASIVE NO) ================= -->
+    <section id="stage2" class="stage-card glass-card rounded-3xl p-5 md:p-8 text-center hidden flex-col items-center">
+      <span class="px-4 py-1.5 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-3">
+        Stage 2 • Quick Question! 🤫
+      </span>
+      <h2 class="text-3xl md:text-5xl font-romantic font-bold text-pink-200 mb-2 glow-title">
+        Are We Together Forever?
+      </h2>
+      <p class="text-xs md:text-sm text-pink-100/80 mb-4">
+        Be completely honest, Alvin! Try clicking your answer below... 😉
+      </p>
+
+      <!-- Evasive Arena Container -->
+      <div id="evasiveArena" class="evasive-arena border border-pink-500/20 rounded-2xl bg-black/30 p-4 mb-4 flex items-center justify-center overflow-hidden">
+        
+        <!-- Evasive "No" Button (Moves ONLY on Click) -->
+        <button id="noBtn" onclick="handleNoClick()" class="absolute px-6 py-2.5 bg-gray-800/90 hover:bg-gray-700 text-gray-200 font-medium rounded-full shadow-lg border border-gray-500/40 text-sm transition-all duration-200 cursor-pointer z-20">
+          No 😜
+        </button>
+
+        <!-- Glowing YES Button (Reveals after 6 clicks) -->
+        <button id="yesBtn" onclick="handleYesClick()" class="glass-btn pulse-glow hidden px-10 py-4 text-xl font-bold text-white rounded-full shadow-2xl z-30 transform hover:scale-110 active:scale-95 animate-bounce">
+          YES! FOREVER & ALWAYS! 💖
+        </button>
+
+      </div>
+
+      <p id="evasiveTooltip" class="text-xs italic text-pink-300/80 h-5 mb-3">
+        Click "No" if you dare...
+      </p>
+
+      <button id="stage2NextBtn" onclick="nextStage(3)" class="glass-btn hidden text-white font-semibold px-8 py-3.5 rounded-full text-base cursor-pointer">
+        Continue To Our Future 📸 👉
+      </button>
+    </section>
+
+    <!-- ================= STAGE 3: OUR FUTURE PHOTO GALLERY ================= -->
+    <section id="stage3" class="stage-card glass-card rounded-3xl p-4 md:p-6 text-center hidden flex-col items-center max-h-[90vh] overflow-y-auto">
+      <span class="px-4 py-1 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-2">
+        Stage 3 • Our Future 📸
+      </span>
+      <h2 class="text-2xl md:text-4xl font-romantic font-bold text-pink-300 mb-1 glow-title">
+        Our Future Memories 📸✨
+      </h2>
+      <p class="text-xs text-pink-100/80 mb-3">
+        Every dream, every hug, and every future we imagine brings us closer to this forever:
+      </p>
+
+      <!-- Compact Romantic 4-Photo Grid -->
+      <div class="grid grid-cols-2 gap-3 w-full mb-4">
+        
+        <!-- PHOTO 1 -->
+        <button type="button" onclick="openScenePhoto('imgFrame1')" aria-label="View Scene 1 image" class="group relative block w-full rounded-xl overflow-hidden border border-pink-400/30 bg-black/40 h-36 sm:h-44 shadow-lg transform transition duration-300 hover:scale-105 text-left">
+          <img id="imgFrame1" src="myfilelarps.jpg" alt="Scene 1" class="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition p-2 flex flex-col justify-end text-left pointer-events-none">
+            <span class="text-[9px] text-pink-300 font-semibold uppercase tracking-wider">Scene 1</span>
+            <p class="text-[10px] text-white/90 leading-tight">Sitting in your lap, leaning in for sweet kisses 😘</p>
+          </div>
+        </button>
+
+        <!-- PHOTO 2 -->
+        <button type="button" onclick="openScenePhoto('imgFrame2')" aria-label="View Scene 2 image" class="group relative block w-full rounded-xl overflow-hidden border border-pink-400/30 bg-black/40 h-36 sm:h-44 shadow-lg transform transition duration-300 hover:scale-105 text-left">
+          <img id="imgFrame2" src="myfilehugsbed.jfif" alt="Scene 2" class="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition p-2 flex flex-col justify-end text-left pointer-events-none">
+            <span class="text-[9px] text-pink-300 font-semibold uppercase tracking-wider">Scene 2</span>
+            <p class="text-[10px] text-white/90 leading-tight">Lying beside you in bed, warm hugs 🛌✨</p>
+          </div>
+        </button>
+
+        <!-- PHOTO 3 (Your Custom Image) -->
+        <button type="button" onclick="openScenePhoto('imgFrame3')" aria-label="View Scene 3 image" class="group relative block w-full rounded-xl overflow-hidden border border-pink-400/30 bg-black/40 h-36 sm:h-44 shadow-lg transform transition duration-300 hover:scale-105 text-left">
+          <img id="imgFrame3" src="myfilehugs.png" alt="Scene 3" class="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition p-2 flex flex-col justify-end text-left pointer-events-none">
+            <span class="text-[9px] text-pink-300 font-semibold uppercase tracking-wider">Scene 3</span>
+            <p class="text-[10px] text-white/90 leading-tight">hugging you and smelling your scent 🦋💕</p>
+          </div>
+        </button>
+
+        <!-- PHOTO 4 -->
+        <button type="button" onclick="openScenePhoto('imgFrame4')" aria-label="View Scene 4 image" class="group relative block w-full rounded-xl overflow-hidden border border-pink-400/30 bg-black/40 h-36 sm:h-44 shadow-lg transform transition duration-300 hover:scale-105 text-left">
+          <img id="imgFrame4" src="myfilehands.jpg" alt="Scene 4" class="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition p-2 flex flex-col justify-end text-left pointer-events-none">
+            <span class="text-[9px] text-pink-300 font-semibold uppercase tracking-wider">Scene 4</span>
+            <p class="text-[10px] text-white/90 leading-tight">having your hands on me 👉👈🤭</p>
+          </div>
+        </button>
+
+      </div>
+
+      <button onclick="nextStage(4)" class="glass-btn text-white font-semibold px-8 py-3 rounded-full text-sm sm:text-base cursor-pointer shrink-0 mt-1">
+        Get Your Birthday Kisses 💋 👉
+      </button>
+    </section>
+
+    <div id="photoViewer" role="dialog" aria-modal="true" aria-label="Photo viewer" class="hidden fixed inset-0 z-50 bg-black/90 p-4 flex-col items-center justify-center" onclick="if (event.target === this) closeScenePhoto()">
+      <button id="photoViewerBackBtn" type="button" onclick="closeScenePhoto()" class="glass-btn text-white font-semibold px-6 py-2 rounded-full mb-4 cursor-pointer">
+        ← Back to the scenes
+      </button>
+      <img id="photoViewerImage" src="" alt="" class="max-w-full max-h-[75vh] object-contain rounded-xl shadow-2xl" />
+    </div>
+
+    <!-- ================= STAGE 4: MODEST KISS FLOOD ================= -->
+    <section id="stage4" class="stage-card glass-card rounded-3xl p-4 md:p-6 text-center hidden flex-col items-center max-h-[90vh] overflow-y-auto">
+      <span class="px-4 py-1.5 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-3">
+        Stage 4 • Special Kiss Delivery 💋
+      </span>
+      <h2 class="text-3xl md:text-5xl font-romantic font-bold text-pink-300 mb-2 glow-title">
+        A Very Modest Surprise...
+      </h2>
+      <p class="text-xs md:text-sm text-pink-100/80 mb-6 max-w-md">
+        Since we are long distance right now, I sent you just a tiny little virtual kiss...
+      </p>
+
+      <button id="kissStormBtn" onclick="triggerKissFlood(250)" class="glass-btn px-6 md:px-8 py-4 rounded-full text-sm md:text-base font-bold text-white shadow-2xl cursor-pointer transform hover:scale-105 active:scale-95 transition my-2">
+        just a very modest amount of, tiny amount of kisses 💋
+      </button>
+
+      <div id="kissCounter" class="mt-4 text-xs font-mono text-pink-300 opacity-0 transition">
+        Kisses delivered: <span id="kissNum" class="text-yellow-300 font-bold text-sm">0</span> 💋
+      </div>
+
+      <div id="kissNavGroup" class="hidden flex-col sm:flex-row gap-3 mt-6">
+        <button onclick="triggerKissFlood(120)" class="px-6 py-2.5 bg-pink-500/30 hover:bg-pink-500/50 text-pink-200 border border-pink-400/40 rounded-full text-xs font-semibold cursor-pointer">
+          MORE KISSES! 💋💋
+        </button>
+        <button onclick="nextStage(5)" class="glass-btn text-white font-semibold px-8 py-2.5 rounded-full text-xs cursor-pointer">
+          Continue To What You Are To Me 💌
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 5: INTERACTIVE NICKNAMES ACTIVITY ================= -->
+    <section id="stage5" class="stage-card glass-card rounded-3xl p-5 md:p-8 text-center hidden flex-col items-center max-h-[90vh] overflow-y-auto">
+      <span class="px-4 py-1.5 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-3">
+        Stage 5 • Interactive Activity 💌
+      </span>
+      <h2 class="text-3xl md:text-5xl font-romantic font-bold text-pink-300 mb-2 glow-title">
+        What You Are To Me
+      </h2>
+      <p class="text-xs md:text-sm text-pink-100/80 mb-6">
+        Tap on each card below to read a special note for every title you hold in my heart:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full text-left mb-6">
+        
+        <div onclick="openNickModal('my daddy 👉👈', 'i love being your babygirl and your dolly , ugh it makes my knees go weak 🥺')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my daddy 👉👈</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+        <div onclick="openNickModal('my king 👑', 'you already do not fear anything or anyone like a king, now you even own me, my body,my soul and my heart,my king 👑')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my king 👑</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+        <div onclick="openNickModal('my baby 💗', 'i just wanna cuddle my sweet baby boy and never let you out of bed. not even for cooking 🦋🌷')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my baby 💗</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+        <div onclick="openNickModal('my soulmate 🌷🦋', 'we met on slowly, cause our souls were destined to meet,don\'t you agree?')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my soulmate 🌷🦋</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+        <div onclick="openNickModal('my darling 😘', 'your texts bring a smile to my face everyday and i don\'t even know what to say then🤭 💕')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my darling 😘</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+        <div onclick="openNickModal('my future husband 💍', 'baby, all the birthdays we spend apart, every second we are missing each other. it\'s all is a countdown to the day i can call you my husband')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my future husband 💍</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+        <div onclick="openNickModal('my owner 😫', 'i wanna stay yours forever darling, your property')" class="glass-card p-4 rounded-2xl border border-pink-400/40 hover:border-pink-300 cursor-pointer transform hover:-translate-y-1 transition group sm:col-span-2">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-pink-200 group-hover:text-pink-100">my owner 😫</span>
+            <span class="text-xs text-pink-400">Tap to read 💌</span>
+          </div>
+        </div>
+
+      </div>
+
+      <button onclick="nextStage(6)" class="glass-btn text-white font-semibold px-8 py-3.5 rounded-full text-base cursor-pointer">
+        Read My Birthday Letter To You 🎂 👉
+      </button>
+    </section>
+
+    <!-- Modal Popup for Nicknames Note -->
+    <div id="nickModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+      <div class="glass-card max-w-md w-full rounded-3xl p-6 text-center border-2 border-pink-400/50 shadow-2xl transform scale-90 transition-transform duration-300" id="nickModalBox">
+        <span id="nickModalTitle" class="text-xl font-bold text-pink-300 block mb-3 font-romantic text-2xl"></span>
+        <p id="nickModalNote" class="text-sm md:text-base text-pink-100 leading-relaxed font-handwriting text-xl mb-6 bg-black/40 p-4 rounded-2xl border border-pink-500/20"></p>
+        <button onclick="closeNickModal()" class="glass-btn px-8 py-2.5 rounded-full text-xs font-semibold text-white cursor-pointer">
+          Close With A Kiss 💋
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= STAGE 6: INTERACTIVE BIRTHDAY LOVE LETTER ================= -->
+    <section id="stage6" class="stage-card glass-card rounded-3xl p-5 md:p-8 text-center hidden flex-col items-center max-h-[90vh] overflow-y-auto">
+      <span class="px-4 py-1.5 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-3">
+        Stage 6 • Birthday Letter 🎂
+      </span>
+      <h2 class="text-3xl md:text-5xl font-romantic font-bold text-pink-300 mb-2 glow-title">
+        A Letter For My Birthday Boy 🎂
+      </h2>
+      <p class="text-xs md:text-sm text-pink-100/80 mb-4">
+        Tap the parchment below to reveal my message line by line...
+      </p>
+
+      <div id="letterCard" onclick="revealNextLine()" class="w-full bg-amber-50/10 border-2 border-pink-400/40 rounded-2xl p-5 text-left cursor-pointer min-h-[220px] max-h-[52vh] overflow-y-auto flex flex-col justify-between mb-4 shadow-inner hover:border-pink-300 transition">
+        <div id="letterTextContainer" class="space-y-3 font-handwriting text-lg md:text-2xl text-pink-100">
+          <!-- Lines appear dynamically -->
+        </div>
+        <div class="text-right text-xs text-pink-300/60 font-sans mt-4 italic">
+          (Tap anywhere inside to reveal next line 👆)
+        </div>
+      </div>
+
+      <div class="w-full bg-gray-800/60 rounded-full h-2 mb-4 overflow-hidden border border-pink-500/20">
+        <div id="letterProgress" class="bg-gradient-to-r from-pink-500 to-rose-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+
+      <button id="stage6NextBtn" onclick="nextStage(7)" class="glass-btn hidden text-white font-semibold px-8 py-3.5 rounded-full text-base cursor-pointer">
+        The Grand Finale 🎉 👉
+      </button>
+    </section>
+
+    <!-- ================= STAGE 7: GRAND FINALE & EXPANDING "SO" CRASH ================= -->
+    <section id="stage7" class="stage-card glass-card rounded-3xl p-5 md:p-8 text-center hidden flex-col items-center relative max-h-[90vh] overflow-y-auto">
+      
+      <div id="finaleMainContent" class="w-full flex flex-col items-center">
+        <span class="px-4 py-1.5 text-xs uppercase tracking-widest font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-3">
+          Grand Finale 🎉
+        </span>
+        <h2 class="text-4xl md:text-6xl font-romantic font-bold text-pink-300 mb-2 glow-title">
+          Happy Birthday Baby! 🎉
+        </h2>
+        <p class="text-sm md:text-base text-pink-100/90 mb-4 font-romantic text-2xl">
+          I love you so much, Alvin
+        </p>
+
+        <div class="so-wrapper my-4">
+          <span id="soText" class="text-4xl md:text-6xl">SO</span>
+        </div>
+
+        <button id="zoomSoBtn" onclick="startSoZoomProcess()" class="glass-btn px-8 py-3.5 rounded-full text-base font-bold text-white shadow-2xl cursor-pointer my-2">
+          How much do I love you? Click to find out! 💖
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <div id="soRunaway" aria-hidden="true" class="hidden fixed inset-0 z-40 items-center justify-center overflow-hidden bg-[#0c0217] p-2">
+    <div id="soRunawayText"></div>
+  </div>
+
+  <!-- FAKE GLITCH / CRASH OVERLAY SCREEN -->
+  <div id="crashOverlay" class="fixed inset-0 z-50 crash-screen hidden flex-col items-center justify-center p-6 text-center">
+    <div class="max-w-md w-full border border-pink-500/50 bg-black/90 p-6 rounded-2xl shadow-2xl text-left">
+      <div class="flex items-center gap-2 mb-4 border-b border-pink-500/30 pb-2">
+        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+        <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+        <span class="text-xs text-pink-400 font-mono ml-2">SYSTEM_OVERLOAD_EXCEPTION</span>
+      </div>
+      <p class="text-xs text-red-400 font-bold mb-2">⚠️ CRITICAL ERROR 404: LOVE OVERLOAD!</p>
+      <p class="text-sm text-pink-200 mb-4 leading-relaxed font-mono">
+        Alvin's birthday app crashed because my love for you is literally infinite and uncontainable! 💥💖
+      </p>
+      <pre class="mb-4 max-h-40 overflow-auto rounded-lg border border-red-500/30 bg-black p-3 text-left text-[10px] leading-relaxed text-green-300 font-mono whitespace-pre-wrap"><code>Uncaught LoveOverflowError: feelings exceeded capacity
+    at sendLove (heart-engine.js:128:24)
+    at repeatForever (birthday.js:64:9)
+    at Promise.all (index 143)
+    at async celebrateAlvin (birthday.js:212:5)
+
+0xLOVE: SOOOOOOOO... is still growing
+SYSTEM STATUS: overwhelmed 💖</code></pre>
+      <p class="text-xs text-pink-300/80 mb-6 font-mono">
+        Status: Eternal & Unending.
+      </p>
+      <div class="text-center">
+        <button onclick="restartApp()" class="px-6 py-2.5 bg-pink-600 hover:bg-pink-500 text-white rounded-full text-xs font-semibold font-sans cursor-pointer transition">
+          Replay From Start 🔄
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================= GLOBAL STATE & AUDIO ================= */
+    let currentStage = 1;
+    let audioCtx = null;
+
+    function playSmoochSound() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.08);
+
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.09);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } catch(e) {}
+    }
+
+    /* ================= BACKGROUND FLOATING HEARTS ================= */
+    const bgCanvas = document.getElementById('bgCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    let bgParticles = [];
+
+    function resizeBgCanvas() {
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeBgCanvas);
+    resizeBgCanvas();
+
+    class BgHeart {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * bgCanvas.width;
+        this.y = bgCanvas.height + 20;
+        this.size = Math.random() * 14 + 8;
+        this.speedY = Math.random() * 1.5 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.2;
+        this.color = `hsla(${Math.random() * 40 + 330}, 100%, 70%, ${this.opacity})`;
+      }
+      update() {
+        this.y -= this.speedY;
+        if (this.y < -30) this.reset();
+      }
+      draw() {
+        bgCtx.save();
+        bgCtx.translate(this.x, this.y);
+        bgCtx.fillStyle = this.color;
+        bgCtx.font = `${this.size}px serif`;
+        bgCtx.fillText('🌸', 0, 0);
+        bgCtx.restore();
+      }
+    }
+
+    for(let i=0; i<30; i++) bgParticles.push(new BgHeart());
+
+    function animateBg() {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      bgParticles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateBg);
+    }
+    animateBg();
+
+    /* ================= STAGE TRANSITION SYSTEM ================= */
+    function nextStage(target) {
+      document.getElementById(`stage${currentStage}`).classList.add('hidden');
+      document.getElementById(`stage${currentStage}`).classList.remove('flex');
+
+      currentStage = target;
+      const nextCard = document.getElementById(`stage${target}`);
+      nextCard.classList.remove('hidden');
+      nextCard.classList.add('flex');
+
+      if (target === 1) initHeartStage();
+      if (target === 2) initEvasiveStage();
+      if (target === 7) fireFinaleConfetti();
+    }
+
+    let activeScenePhotoButton = null;
+
+    function openScenePhoto(imageId) {
+      const sourceImage = document.getElementById(imageId);
+      const viewer = document.getElementById('photoViewer');
+      const viewerImage = document.getElementById('photoViewerImage');
+      activeScenePhotoButton = sourceImage.closest('button');
+      viewerImage.src = sourceImage.src;
+      viewerImage.alt = sourceImage.alt;
+      viewer.classList.remove('hidden');
+      viewer.classList.add('flex');
+      document.getElementById('photoViewerBackBtn').focus();
+    }
+
+    function closeScenePhoto() {
+      const viewer = document.getElementById('photoViewer');
+      viewer.classList.add('hidden');
+      viewer.classList.remove('flex');
+      if (activeScenePhotoButton) activeScenePhotoButton.focus();
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !document.getElementById('photoViewer').classList.contains('hidden')) {
+        closeScenePhoto();
+      }
+    });
+
+    /* ================= STAGE 1: MULTILINGUAL PARAMETRIC HEART ================= */
+    const heartCanvas = document.getElementById('heartCanvas');
+    const hCtx = heartCanvas.getContext('2d');
+
+    const loveLanguages = [
+      "I love you", "Je t'aime", "Te amo", "Ich liebe dich", "Saranghae", "Aishiteru", 
+      "Ti amo", "Eu te amo", "Wo ai ni", "Nakupenda", "Mahal kita", "Aku cinta kamu", 
+      "Mein tumse pyar karta hoon", "S'agapo", "Ya tebya lyublyu", "T'estim", "Volim te", 
+      "Jeg elsker deg", "Jag älskar dig", "Szeretlek", "Kocham Cię", "Te iubesc", "Aloha au iā 'oe",
+      "Inikah cinta", "Mina armastan sind", "Saya cintakan mu", "Ek het jou lief"
+    ];
+
+    let heartParticles = [];
+    let heartAnimId = null;
+
+    function initHeartStage() {
+      if (heartAnimId) cancelAnimationFrame(heartAnimId);
+      heartParticles = [];
+      const totalPoints = 260;
+      const centerX = heartCanvas.width / 2;
+      const centerY = heartCanvas.height / 2 - 10;
+      const scale = 10.5;
+
+      for (let i = 0; i < totalPoints; i++) {
+        const t = (Math.PI * 2 * i) / totalPoints;
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+
+        const text = loveLanguages[i % loveLanguages.length];
+        
+        // Spawn particles off-screen in all directions
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 280 + Math.random() * 200;
+        const startX = centerX + Math.cos(angle) * distance;
+        const startY = centerY + Math.sin(angle) * distance;
+
+        heartParticles.push({
+          targetX: centerX + x * scale,
+          targetY: centerY + y * scale,
+          currentX: startX,
+          currentY: startY,
+          text: text,
+          fontSize: Math.floor(Math.random() * 3) + 9,
+          color: `hsl(${330 + Math.random() * 40}, 100%, ${65 + Math.random() * 20}%)`,
+          delay: Math.floor(i * 2.5),
+          active: false
+        });
+      }
+
+      let frameCount = 0;
+
+      function animateHeart() {
+        hCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+        let allSettled = true;
+        frameCount++;
+
+        heartParticles.forEach(p => {
+          if (frameCount >= p.delay) {
+            p.active = true;
+          }
+
+          if (p.active) {
+            const dx = p.targetX - p.currentX;
+            const dy = p.targetY - p.currentY;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist > 0.5) {
+              allSettled = false;
+              p.currentX += dx * 0.04;
+              p.currentY += dy * 0.04;
+            } else {
+              p.currentX = p.targetX;
+              p.currentY = p.targetY;
+            }
+
+            hCtx.fillStyle = p.color;
+            hCtx.font = `${p.fontSize}px 'Poppins', sans-serif`;
+            hCtx.textAlign = "center";
+            hCtx.fillText(p.text, p.currentX, p.currentY);
+          } else {
+            allSettled = false;
+          }
+        });
+
+        if (!allSettled || frameCount < totalPoints * 2.5 + 60) {
+          heartAnimId = requestAnimationFrame(animateHeart);
+        } else {
+          document.getElementById('stage1NextBtn').classList.remove('hidden');
+          document.getElementById('heartProgressText').textContent = "My whole heart belongs to you, Alvin! ❤️";
+        }
+      }
+
+      animateHeart();
+    }
+
+    window.onload = function() {
+      initHeartStage();
+    };
+
+    /* ================= STAGE 2: EVASIVE "NO" BUTTON ================= */
+    let noClickCount = 0;
+
+    function initEvasiveStage() {
+      noClickCount = 0;
+      const noBtn = document.getElementById('noBtn');
+      const yesBtn = document.getElementById('yesBtn');
+      const tooltip = document.getElementById('evasiveTooltip');
+
+      noBtn.style.top = '50%';
+      noBtn.style.left = '50%';
+      noBtn.style.transform = 'translate(-50%, -50%)';
+      noBtn.classList.remove('hidden');
+      yesBtn.classList.add('hidden');
+      tooltip.textContent = "Click 'No' if you dare...";
+    }
+
+    function handleNoClick() {
+      noClickCount++;
+      playSmoochSound();
+
+      const arena = document.getElementById('evasiveArena');
+      const noBtn = document.getElementById('noBtn');
+      const tooltip = document.getElementById('evasiveTooltip');
+
+      const arenaRect = arena.getBoundingClientRect();
+      const btnWidth = noBtn.offsetWidth || 84;
+      const btnHeight = noBtn.offsetHeight || 44;
+
+      const padding = 12;
+      const maxX = Math.max(0, arenaRect.width - btnWidth - padding * 2);
+      const maxY = Math.max(0, arenaRect.height - btnHeight - padding * 2);
+
+      const newX = Math.max(padding, Math.min(Math.floor(Math.random() * (maxX + 1)), maxX));
+      const newY = Math.max(padding, Math.min(Math.floor(Math.random() * (maxY + 1)), maxY));
+
+      noBtn.style.left = `${newX}px`;
+      noBtn.style.top = `${newY}px`;
+      noBtn.style.transform = 'none';
+
+      const wittyResponses = [
+        "Hey! You missed! 😜",
+        "Nope! Try again Alvin! 💖",
+        "Wrong option! Haha! 😂",
+        "You can't say no to me! 😉",
+        "Still trying? Nice try! 😜",
+        "Almost... but nope! 🤭",
+        "Okay fine, look what appeared!"
+      ];
+      tooltip.textContent = wittyResponses[Math.min(noClickCount, wittyResponses.length - 1)];
+
+      if (noClickCount >= 6) {
+        noBtn.classList.add('hidden');
+        document.getElementById('yesBtn').classList.remove('hidden');
+      }
+    }
+
+    function handleYesClick() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+      }
+      document.getElementById('evasiveTooltip').textContent = "CORRECT ANSWER! I LOVE YOU FOREVER! 🎉💖";
+      document.getElementById('stage2NextBtn').classList.remove('hidden');
+    }
+
+    /* ================= STAGE 4: MODEST KISS FLOOD ================= */
+    let kissCounterTotal = 0;
+
+    function triggerKissFlood(count) {
+      const kissCounterEl = document.getElementById('kissCounter');
+      const kissNumEl = document.getElementById('kissNum');
+      kissCounterEl.classList.remove('opacity-0');
+
+      const kissEmojis = ['💋', '😘', '💖', '💋', '💕'];
+
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'kiss-particle';
+          el.textContent = kissEmojis[Math.floor(Math.random() * kissEmojis.length)];
+
+          const startX = Math.random() * window.innerWidth;
+          const startY = Math.random() * window.innerHeight;
+
+          el.style.left = `${startX}px`;
+          el.style.top = `${startY}px`;
+          el.style.fontSize = `${Math.random() * 26 + 22}px`;
+
+          document.body.appendChild(el);
+          playSmoochSound();
+
+          kissCounterTotal++;
+          kissNumEl.textContent = kissCounterTotal;
+
+          setTimeout(() => el.remove(), 3000);
+        }, i * 22);
+      }
+
+      setTimeout(() => {
+        document.getElementById('kissNavGroup').classList.remove('hidden');
+        document.getElementById('kissNavGroup').classList.add('flex');
+      }, count * 22 + 500);
+    }
+
+    /* ================= STAGE 5: NICKNAMES MODAL ================= */
+    function openNickModal(title, note) {
+      playSmoochSound();
+      document.getElementById('nickModalTitle').textContent = title;
+      document.getElementById('nickModalNote').textContent = note;
+
+      const modal = document.getElementById('nickModal');
+      const box = document.getElementById('nickModalBox');
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-90');
+        box.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeNickModal() {
+      const modal = document.getElementById('nickModal');
+      const box = document.getElementById('nickModalBox');
+
+      modal.classList.add('opacity-0');
+      box.classList.remove('scale-100');
+      box.classList.add('scale-90');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    /* ================= STAGE 6: LETTER REVEAL ================= */
+    const letterLines = [
+      "My love, happy birthday to the one person who makes life feel warmer, kinder, and more beautiful just by being in it, Alvin. 🎂❤️",
+      "There are no words that can fully explain what you mean to me, because loving you feels bigger than language, bigger than distance, and bigger than time.",
+      "You are not just someone I care about — you are the person my heart has chosen, over and over, in every way. I hope you know that I love you more than I can ever say.",
+      "Every promise you make, every message you send, and every moment we spend together is locked in my heart forever.",
+      "One day, I imagine, I’ll finally be able to hug you and tell you just how much you mean to me. But for now, I’m writing this instead, because I want you to know that even from a distance, my heart is always with you.",
+      "I never knew I would get such a rare person in life, but now that I have you, I don’t ever want to let go. Again, happiest birthday to my darling. Enjoy this special day."
+    ];
+
+    let currentLineIdx = 0;
+
+    function revealNextLine() {
+      if (currentLineIdx < letterLines.length) {
+        playSmoochSound();
+        const container = document.getElementById('letterTextContainer');
+        const p = document.createElement('p');
+        p.className = 'opacity-0 transform translate-y-2 transition-all duration-500';
+        p.textContent = letterLines[currentLineIdx];
+        container.appendChild(p);
+
+        setTimeout(() => {
+          p.classList.remove('opacity-0', 'translate-y-2');
+        }, 50);
+
+        currentLineIdx++;
+        const progressPct = (currentLineIdx / letterLines.length) * 100;
+        document.getElementById('letterProgress').style.width = `${progressPct}%`;
+
+        if (currentLineIdx === letterLines.length) {
+          document.getElementById('stage6NextBtn').classList.remove('hidden');
+        }
+      }
+    }
+
+    /* ================= STAGE 7: EXPANDING SO & GLITCH CRASH ================= */
+    function fireFinaleConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+      }
+    }
+
+    function startSoZoomProcess() {
+      const soText = document.getElementById('soText');
+      const btn = document.getElementById('zoomSoBtn');
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.5';
+
+      soText.style.transition = 'transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      soText.style.transform = 'scale(5)';
+
+      setTimeout(() => {
+        const runaway = document.getElementById('soRunaway');
+        const runawayText = document.getElementById('soRunawayText');
+        document.getElementById('finaleMainContent').classList.add('hidden');
+        runawayText.textContent = 'SO';
+        runaway.classList.remove('hidden');
+        runaway.classList.add('flex');
+        runaway.setAttribute('aria-hidden', 'false');
+
+        let addedOs = 0;
+        const finalOCount = 100;
+        const interval = setInterval(() => {
+          runawayText.textContent += 'O';
+          addedOs++;
+          if (addedOs % 8 === 0) playSmoochSound();
+
+          if (addedOs === finalOCount) {
+            clearInterval(interval);
+            document.body.classList.add('shake-screen');
+            setTimeout(() => {
+              document.body.classList.remove('shake-screen');
+              runaway.classList.add('hidden');
+              runaway.classList.remove('flex');
+              runaway.setAttribute('aria-hidden', 'true');
+              document.getElementById('crashOverlay').classList.remove('hidden');
+              document.getElementById('crashOverlay').classList.add('flex');
+              fireFinaleConfetti();
+            }, 500);
+          }
+        }, 70);
+      }, 1250);
+    }
+
+    function restartApp() {
+      document.getElementById('crashOverlay').classList.add('hidden');
+      document.getElementById('crashOverlay').classList.remove('flex');
+
+      // Reset SO scale
+      const soText = document.getElementById('soText');
+      soText.textContent = 'SO';
+      soText.style.transform = 'scale(1)';
+      soText.style.transition = '';
+      document.getElementById('finaleMainContent').classList.remove('hidden');
+      const runaway = document.getElementById('soRunaway');
+      runaway.classList.add('hidden');
+      runaway.classList.remove('flex');
+      runaway.setAttribute('aria-hidden', 'true');
+      document.getElementById('soRunawayText').textContent = '';
+      document.getElementById('zoomSoBtn').style.pointerEvents = 'auto';
+      document.getElementById('zoomSoBtn').style.opacity = '1';
+
+      // Reset letter
+      document.getElementById('letterTextContainer').innerHTML = '';
+      document.getElementById('letterProgress').style.width = '0%';
+      currentLineIdx = 0;
+      document.getElementById('stage6NextBtn').classList.add('hidden');
+
+      // Reset kiss count
+      kissCounterTotal = 0;
+      document.getElementById('kissNum').textContent = '0';
+
+      nextStage(1);
+    }
+  </script>
+</body>
+</html>
